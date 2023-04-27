@@ -1,0 +1,145 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$YUENeUG6hdlq$LdqsekFmeejEygRKIbUnIa+BKaS8tMLes6cZENH9u64=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "me@me.com",
+      "first_name": "Steve",
+      "last_name": "Brownlee",
+      "email": "me@me.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2020-11-16T21:26:14.900Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$2Eb7EJ0kYvbe$FB1s0rw2+Qq+xj0dSo8VGKFjvajANYUE/kb7t6Czt7E=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "you@you.com",
+      "first_name": "Steve",
+      "last_name": "Brownlee",
+      "email": "you@you.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2020-11-18T16:09:22.878Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "73f6cdf09e5990b681644e4735f356bdbbb3b113",
+    "fields": {
+      "user": 1,
+      "created": "2020-11-16T21:26:15.212Z"
+    }
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "b60f7616117a41058bfb967d28ae039c75482234",
+    "fields": {
+      "user": 2,
+      "created": "2020-11-18T16:09:23.160Z"
+    }
+  },
+  {
+    "model": "favamealapi.restaurant",
+    "pk": 1,
+    "fields": {
+      "name": "Chaatable",
+      "address": "1331 Holiday Road"
+    }
+  },
+  {
+    "model": "favamealapi.restaurant",
+    "pk": 2,
+    "fields": {
+      "name": "Remo's",
+      "address": "1331 Holiday Road"
+    }
+  },
+  {
+    "model": "favamealapi.meal",
+    "pk": 1,
+    "fields": {
+      "name": "Puff Puff Pass",
+      "restaurant": 1
+    }
+  },
+  {
+    "model": "favamealapi.meal",
+    "pk": 2,
+    "fields": {
+      "name": "Chaat",
+      "restaurant": 1
+    }
+  },
+  {
+    "model": "favamealapi.favoritemeal",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "meal": 1
+    }
+  },
+  {
+    "model": "favamealapi.favoriterestaurant",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "restaurant": 1
+    }
+  },
+  {
+    "model": "favamealapi.favoriterestaurant",
+    "pk": 4,
+    "fields": {
+      "user": 2,
+      "restaurant": 1
+    }
+  },
+  {
+    "model": "favamealapi.favoriterestaurant",
+    "pk": 5,
+    "fields": {
+      "user": 2,
+      "restaurant": 2
+    }
+  },
+  {
+    "model": "favamealapi.mealrating",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "meal": 1,
+      "rating": 3
+    }
+  },
+  {
+    "model": "favamealapi.mealrating",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "meal": 2,
+      "rating": 3
+    }
+  },
+  {
+    "model": "favamealapi.mealrating",
+    "pk": 3,
+    "fields": {
+      "user": 2,
+      "meal": 2,
+      "rating": 6
+    }
+  }
+]
