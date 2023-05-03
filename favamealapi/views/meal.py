@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from favamealapi.models import Meal, MealRating, Restaurant, FavoriteMeal
+from favamealapi.models import Meal, MealRating, Restaurant
 from favamealapi.views.restaurant import RestaurantSerializer
 from django.db.models import Avg, Count, Q
 
@@ -47,13 +47,14 @@ class MealView(ViewSet):
         try:
             meal = Meal.objects.annotate(avg_rating=Avg('mealrating__rating')).get(pk=pk)
             
-            # TODO: Get the rating for current user and assign to `user_rating` property
             
-            # TODO: Get the average rating for requested meal and assign to `avg_rating` property
-
             
             meal.is_favorite = request.auth.user in meal.favorite_meals.all()
-            meal.user_rating = meal.mealrating.filter(user=request.auth.user).exists()
+            try:
+                rating_object = MealRating.objects.get(user=request.auth.user, meal=meal)
+                meal.user_rating = rating_object.rating 
+            except MealRating.DoesNotExist:
+                meal.user_rating = {}
             meal.avg_rating = meal.avg_rating if meal.avg_rating is not None else 0
             serializer = MealSerializer(meal)
             return Response(serializer.data)
@@ -72,15 +73,18 @@ class MealView(ViewSet):
                 'favorite_meals',
                 filter=Q(favorite_meals=request.auth.user)
             )
-           # user_rating=Count(
-              #  'mealrating',
-              #  meal.mealrating.filter(request.auth.user)
-           # ) 
-        )
+            #user_rating=Count(
+               # 'mealrating',
+               # filter=Q(mealrating=request.auth.user.id)
+            #) 
+        ).all()
         
         for meal in meals:
-            meal.is_favorite = request.auth.user in meal.favorite_meals.all()
-            meal.user_rating = meal.mealrating.filter(user=request.auth.user).exists()
+            try:
+                rating_object = MealRating.objects.get(user=request.auth.user, meal=meal)
+                meal.user_rating = rating_object.rating 
+            except MealRating.DoesNotExist:
+                meal.user_rating = {}
 
         serializer = MealSerializer(meals, many=True)
 
@@ -110,15 +114,16 @@ class MealView(ViewSet):
         meal = Meal.objects.get(pk=pk)
         rating_value = request.data.get('rating')
         user = request.auth.user
-        meal_rating = MealRating.objects.create(user=user, meal=meal, rating=rating_value)
-        meal.mealrating.add(meal_rating)
+        mealrating = MealRating.objects.create(user=user, meal=meal, rating=rating_value)
+        # meal.mealrating.add(meal_rating)
         return Response({'message': 'Meal rated'}, status=status.HTTP_201_CREATED)
     
     @action(methods=['put'], detail=True)
     def updateRate(self, request, pk):
         meal = Meal.objects.get(pk=pk)
-        meal_rating = MealRating.objects.get(user=request.auth.user)
-        meal_rating.rating = request.data.get('rating')
-        meal_rating.save()
+        mealrating = MealRating.objects.get(user=request.auth.user, meal=meal)
+        mealrating.rating = request.data.get('rating')
+        mealrating.save()
         return Response({'message': 'Meal rating updated'}, status=status.HTTP_204_NO_CONTENT)
    
+    
